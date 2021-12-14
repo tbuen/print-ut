@@ -1,0 +1,15 @@
+{
+    "name": "print.tbuen",
+    "description": "Simple Printer App",
+    "architecture": "@CLICK_ARCH@",
+    "title": "SimplePrint",
+    "hooks": {
+        "print": {
+            "apparmor": "print.apparmor",
+            "desktop":  "print.desktop"
+        }
+    },
+    "version": "0.1.0",
+    "maintainer": "Thomas Büning <buening@online.de>",
+    "framework" : "@CLICK_FRAMEWORK@"
+}
