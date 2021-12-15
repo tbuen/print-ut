@@ -14,44 +14,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.7
+import QtQuick 2.4
+import QtQuick.Layouts 1.1
+import QtQuick.Controls 2.2
+import QtQuick.Controls.Suru 2.2
 import Ubuntu.Components 1.3
 import Ubuntu.Components.Popups 1.3
-import "components"
 
-MainView {
-    id: root
-    objectName: 'mainView'
-    applicationName: 'print.tbuen'
-    automaticOrientation: true
+Dialog {
+    id: dialogue
+    objectName: "dialogPopup"
 
-    width: units.gu(45)
-    height: units.gu(75)
+    property var buttonText: i18n.tr("Okay")
+    property var buttonColor: Suru.theme == Suru.Dark ? UbuntuColors.ash : UbuntuColors.graphite
 
-    PageStack {
-        id: mainStack
-    }
-    Component.onCompleted: mainStack.push(Qt.resolvedUrl("pages/Print.qml"))
+    //place new Items before the Buttons
+    default property alias content: top_col.data
 
-    Timer {
-        id: refreshTimer
-        interval: 100
-        running: true
-        repeat: true
-        triggeredOnStart: false
-        onTriggered: go.refreshList()
+    text: dialogue.text
+
+    Column {
+        id: top_col
+        spacing: Suru.units.gu(2)
     }
 
-    Component {
-        id: errorMessage
-        Message {
-        }
-    }
-
-    Item {
-        id: functions
-        function showError(text) {
-            PopupUtils.open(errorMessage, null, {'text': text})
+    Button {
+        text: dialogue.buttonText
+        color: dialogue.buttonColor
+        onClicked: {
+            Qt.inputMethod.commit();
+            PopupUtils.close(dialogue)
         }
     }
 }

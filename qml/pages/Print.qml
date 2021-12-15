@@ -41,7 +41,7 @@ Page {
             ListItemLayout {
                 id: printerItem
                 title.text: i18n.tr("Printer")
-                subtitle.text: printer.name ? printer.name : "<none>"
+                subtitle.text: go.printer ? go.printer : "<none>"
                 Icon {
                     height: parent.title.font.pixelSize * 2
                     name: "printer-symbolic"
@@ -58,7 +58,7 @@ Page {
                 actions: [
                     Action {
                         iconName: "edit-clear"
-                        onTriggered: printer.select(0)
+                        onTriggered: go.selectPrinter(0)
                     }
                 ]
             }
@@ -69,7 +69,7 @@ Page {
             ListItemLayout {
                 id: fileItem
                 title.text: i18n.tr("File")
-                subtitle.text: file.name ? file.name : "<none>"
+                subtitle.text: go.filename ? go.filename : "<none>"
                 Icon {
                     height: parent.title.font.pixelSize * 2
                     name: "stock_document"
@@ -90,7 +90,7 @@ Page {
                 actions: [
                     Action {
                         iconName: "edit-clear"
-                        onTriggered: file.set("")
+                        onTriggered: go.setFile("")
                     }
                 ]
             }
@@ -106,7 +106,13 @@ Page {
                     anchors.rightMargin: anchors.leftMargin
                     text: i18n.tr("Print")
                     color: theme.palette.normal.positive
-                    enabled: printer.name && file.name
+                    enabled: go.printer && go.filename
+                    onClicked: {
+                        var msg = go.print()
+                        if (msg != "") {
+                            functions.showError(msg)
+                        }
+                    }
                 }
             }
         }
@@ -122,7 +128,7 @@ Page {
                 fileNames.push(filePath)
             }
             if (fileNames.length > 0) {
-                file.set(fileNames[0])
+                go.setFile(fileNames[0])
             }
         }
     }

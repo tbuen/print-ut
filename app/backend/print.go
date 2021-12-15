@@ -14,50 +14,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package app
+package backend
 
 import (
-	"os"
-	"path/filepath"
-
-	"github.com/nanu-c/qml-go"
+	"github.com/phin1x/go-ipp"
 )
 
-type File struct {
-	Name string
-}
-
-var (
-	file File
-	data []byte
-)
-
-func (f *File) Set(name string) {
-	data = data[:0]
-	f.Name = ""
-	defer qml.Changed(f, &f.Name)
-
-	if name == "" {
-		return
-	}
-
-	fh, err := os.Open(name)
-	if err != nil {
-		return
-	}
-	defer fh.Close()
-
-	i, err := fh.Stat()
-	if err != nil {
-		return
-	}
-
-	data = make([]byte, i.Size())
-	n, err := fh.Read(data)
-	if err != nil {
-		return
-	}
-	data = data[:n]
-
-	f.Name = filepath.Base(name)
+func Print(file string, prt Printer) error {
+	client := ipp.NewIPPClient(prt.IP, prt.Port, "", "", prt.TLS)
+	_, err := client.PrintFile(file, "my-printer", map[string]interface{}{})
+	return err
 }

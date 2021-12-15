@@ -30,12 +30,12 @@ Page {
     WaitingBar {
         id: waitingBar
         anchors.top: header.bottom
-        waiting: printer.discovery
+        waiting: go.discovery
     }
 
     Rectangle {
         anchors {
-            top: printer.discovery ? waitingBar.bottom : header.bottom
+            top: go.discovery ? waitingBar.bottom : header.bottom
             bottom: parent.bottom
             left: parent.left
             right: parent.right
@@ -64,7 +64,7 @@ Page {
                     }
                 }
                 onClicked: {
-                    printer.select(id)
+                    go.selectPrinter(id)
                     mainStack.pop()
                 }
             }
@@ -79,9 +79,9 @@ Page {
 
     onVisibleChanged: {
         if (visible) {
-            printer.startDiscovery(listModel)
+            go.startDiscovery(listModel)
         } else {
-            printer.stopDiscovery()
+            go.stopDiscovery()
         }
     }
 }

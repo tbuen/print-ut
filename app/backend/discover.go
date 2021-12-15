@@ -29,6 +29,8 @@ type Printer struct {
 	ID    int    `json:"id"`
 	Model string `json:"model"`
 	IP    string `json:"ip"`
+	Port  int    `json:"-"`
+	TLS   bool   `json:"-"`
 }
 
 var id int
@@ -62,7 +64,7 @@ func Discover() (chan *Printer, context.CancelFunc, error) {
 				}
 			}
 			id++
-			printers <- &Printer{id, model, entry.AddrIPv4[0].String()}
+			printers <- &Printer{id, model, entry.AddrIPv4[0].String(), entry.Port, false}
 		}
 	}(entries)
 
