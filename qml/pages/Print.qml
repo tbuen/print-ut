@@ -16,6 +16,8 @@
 
 import QtQuick 2.7
 import Ubuntu.Components 1.3
+import Ubuntu.Content 1.3 as ContentHub
+import "../components"
 
 Page {
     id: printPage
@@ -67,7 +69,7 @@ Page {
             ListItemLayout {
                 id: fileItem
                 title.text: i18n.tr("File")
-                subtitle.text: "<none>"
+                subtitle.text: file.name ? file.name : "<none>"
                 Icon {
                     height: parent.title.font.pixelSize * 2
                     name: "stock_document"
@@ -79,7 +81,19 @@ Page {
                     SlotsLayout.position: SlotsLayout.Trailing
                 }
             }
-            onClicked: console.log("clicked on File")
+            onClicked: {
+                Qt.inputMethod.hide()
+                mediaImporter.contentType = ContentHub.ContentType.Documents
+                mediaImporter.requestMedia()
+            }
+            leadingActions: ListItemActions {
+                actions: [
+                    Action {
+                        iconName: "edit-clear"
+                        onTriggered: file.set("")
+                    }
+                ]
+            }
         }
 
         ListItem {
@@ -92,9 +106,23 @@ Page {
                     anchors.rightMargin: anchors.leftMargin
                     text: i18n.tr("Print")
                     color: theme.palette.normal.positive
-                    enabled: printer.name
-                    onClicked: console.log("clicked on Print!!")
+                    enabled: printer.name && file.name
                 }
+            }
+        }
+    }
+
+    MediaImport {
+        id: mediaImporter
+
+        onMediaReceived: {
+            var fileNames = []
+            for (var i = 0; i < importedFiles.length; i++) {
+                var filePath = String(importedFiles[i].url).replace('file://', '')
+                fileNames.push(filePath)
+            }
+            if (fileNames.length > 0) {
+                file.set(fileNames[0])
             }
         }
     }

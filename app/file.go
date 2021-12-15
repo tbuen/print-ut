@@ -16,9 +16,48 @@
 
 package app
 
-import "github.com/nanu-c/qml-go"
+import (
+	"os"
+	"path/filepath"
 
-func Start(c *qml.Context) {
-	c.SetVar("printer", &printer)
-	c.SetVar("file", &file)
+	"github.com/nanu-c/qml-go"
+)
+
+type File struct {
+	Name string
+}
+
+var (
+	file File
+	data []byte
+)
+
+func (f *File) Set(name string) {
+	data = data[:0]
+	f.Name = ""
+	defer qml.Changed(f, &f.Name)
+
+	if name == "" {
+		return
+	}
+
+	fh, err := os.Open(name)
+	if err != nil {
+		return
+	}
+	defer fh.Close()
+
+	i, err := fh.Stat()
+	if err != nil {
+		return
+	}
+
+	data = make([]byte, i.Size())
+	n, err := fh.Read(data)
+	if err != nil {
+		return
+	}
+	data = data[:n]
+
+	f.Name = filepath.Base(name)
 }
