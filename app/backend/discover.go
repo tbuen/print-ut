@@ -26,9 +26,12 @@ import (
 )
 
 type Printer struct {
+	ID    int    `json:"id"`
 	Model string `json:"model"`
 	IP    string `json:"ip"`
 }
+
+var id int
 
 func Discover() (chan *Printer, context.CancelFunc, error) {
 	resolver, err := zeroconf.NewResolver(nil)
@@ -58,11 +61,12 @@ func Discover() (chan *Printer, context.CancelFunc, error) {
 					break
 				}
 			}
-			printers <- &Printer{model, entry.AddrIPv4[0].String()}
+			id++
+			printers <- &Printer{id, model, entry.AddrIPv4[0].String()}
 		}
 	}(entries)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*120)
 
 	go func() {
 		err = resolver.Browse(ctx, "_ipp._tcp", "local.", entries)
@@ -71,7 +75,6 @@ func Discover() (chan *Printer, context.CancelFunc, error) {
 		}
 		<-ctx.Done()
 		close(printers)
-		fmt.Println("End of scan")
 	}()
 
 	return printers, cancel, nil

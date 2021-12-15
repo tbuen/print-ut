@@ -16,73 +16,8 @@
 
 package app
 
-import (
-	"context"
-	"encoding/json"
-	"fmt"
-
-	"github.com/nanu-c/qml-go"
-
-	"github.com/tbuen/print-ut/app/backend"
-)
-
-type Printer struct {
-	Discovery bool
-	Name      string
-}
-
-var (
-	printer Printer
-	cancel  context.CancelFunc
-	channel chan *backend.Printer
-	model   *qml.Common
-)
+import "github.com/nanu-c/qml-go"
 
 func Start(c *qml.Context) {
 	c.SetVar("printer", &printer)
-}
-
-func (p *Printer) StartDiscovery(obj *qml.Common) {
-	if p.Discovery {
-		return
-	}
-	model = obj
-	var err error
-	channel, cancel, err = backend.Discover()
-	if err != nil {
-		return
-	}
-	p.Discovery = true
-	qml.Changed(p, &p.Discovery)
-}
-
-func (p *Printer) StopDiscovery() {
-	if cancel == nil {
-		return
-	}
-	cancel()
-}
-
-func (p *Printer) RefreshList() {
-	if !p.Discovery {
-		return
-	}
-	select {
-	case prt, ok := <-channel:
-		if ok {
-			fmt.Println("Received something:", prt)
-			buf, err := json.Marshal(prt)
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-			fmt.Println("Send this to qml:", string(buf))
-			model.Call("add", string(buf))
-		} else {
-			fmt.Println("Channel closed")
-			p.Discovery = false
-			qml.Changed(p, &p.Discovery)
-		}
-	default:
-	}
 }

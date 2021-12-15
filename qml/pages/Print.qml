@@ -52,6 +52,14 @@ Page {
                 }
             }
             onClicked: mainStack.push(Qt.resolvedUrl("PrinterList.qml"))
+            leadingActions: ListItemActions {
+                actions: [
+                    Action {
+                        iconName: "edit-clear"
+                        onTriggered: printer.select(0)
+                    }
+                ]
+            }
         }
 
         ListItem {
@@ -78,15 +86,15 @@ Page {
             height: button.height + (divider.visible ? divider.height : 0)
             ListItemLayout {
                 id: button
-        Button {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            //anchors.leftMargin: 10
-            anchors.rightMargin: anchors.leftMargin
-            text: i18n.tr("Print")
-            color: 'green'
-            onClicked: console.log("clicked on Print!!")
-        }
+                Button {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.rightMargin: anchors.leftMargin
+                    text: i18n.tr("Print")
+                    color: theme.palette.normal.positive
+                    enabled: printer.name
+                    onClicked: console.log("clicked on Print!!")
+                }
             }
         }
     }

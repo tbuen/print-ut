@@ -35,7 +35,7 @@ Page {
 
     Rectangle {
         anchors {
-            top: waitingBar.bottom
+            top: printer.discovery ? waitingBar.bottom : header.bottom
             bottom: parent.bottom
             left: parent.left
             right: parent.right
@@ -48,15 +48,6 @@ Page {
                 listModel.append(prt)
             }
         }
-
-        /*ListItemActions {
-            id: leading
-            actions: [
-                Action {
-                    iconName: "delete"
-                }
-            ]
-        }*/
 
         Component {
             id: listDelegate
@@ -72,8 +63,10 @@ Page {
                         SlotsLayout.position: SlotsLayout.Leading
                     }
                 }
-                //leadingActions: leading
-                onClicked: console.log("clicked on a printer")
+                onClicked: {
+                    printer.select(id)
+                    mainStack.pop()
+                }
             }
         }
 

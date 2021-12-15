@@ -11,6 +11,7 @@
    sodipodi:docname="icon.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
@@ -30,14 +31,14 @@
      inkscape:bbox-nodes="true"
      inkscape:bbox-paths="true"
      inkscape:zoom="0.94867185"
-     inkscape:cx="95.92358"
+     inkscape:cx="95.396527"
      inkscape:cy="220.308"
      inkscape:window-width="1920"
      inkscape:window-height="1011"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer3"
      showborder="false"
      inkscape:snap-global="true"
      inkscape:object-paths="true"
@@ -49,12 +50,47 @@
      inkscape:snap-text-baseline="false"
      inkscape:snap-page="false" />
   <defs
-     id="defs15438" />
+     id="defs15438">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2083">
+      <stop
+         style="stop-color:#1e00c8;stop-opacity:1"
+         offset="0"
+         id="stop2079" />
+      <stop
+         style="stop-color:#0a0050;stop-opacity:1"
+         offset="1"
+         id="stop2081" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2083"
+       id="linearGradient2085"
+       x1="0"
+       y1="0"
+       x2="135.46666"
+       y2="135.46666"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Gradient"
+     style="display:inline">
+    <rect
+       style="fill:url(#linearGradient2085);fill-opacity:1;stroke-width:17.7789;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect1967"
+       width="135.46666"
+       height="135.46666"
+       x="0"
+       y="0" />
+  </g>
   <g
      inkscape:label="Color"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:inline">
+     style="display:none">
     <path
        id="rect2018"
        style="fill:#1500bc;fill-opacity:1;stroke:none;stroke-width:0.583727"
