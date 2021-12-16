@@ -19,6 +19,7 @@ package app
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"path/filepath"
 
 	"github.com/nanu-c/qml-go"
@@ -75,6 +76,7 @@ func (ui *UiData) RefreshList() {
 	select {
 	case prt, ok := <-channel:
 		if ok {
+			fmt.Println("Found printer:", prt)
 			scanResult[prt.ID] = *prt
 			buf, err := json.Marshal(prt)
 			if err != nil {
@@ -102,7 +104,11 @@ func (ui *UiData) SelectPrinter(id int) {
 
 func (ui *UiData) SetFile(name string) {
 	filename = name
-	ui.Filename = filepath.Base(name)
+	if name == "" {
+		ui.Filename = ""
+	} else {
+		ui.Filename = filepath.Base(name)
+	}
 	qml.Changed(ui, &ui.Filename)
 }
 

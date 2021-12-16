@@ -30,6 +30,7 @@ type Printer struct {
 	Model string `json:"model"`
 	IP    string `json:"ip"`
 	Port  int    `json:"-"`
+	Queue string `json:"-"`
 	TLS   bool   `json:"-"`
 }
 
@@ -57,14 +58,21 @@ func Discover() (chan *Printer, context.CancelFunc, error) {
 			fmt.Println()
 
 			model := entry.ServiceRecord.Instance
+			queue := ""
+			tls := false
 			for _, t := range entry.Text {
 				if strings.HasPrefix(t, "ty=") {
 					model = strings.TrimPrefix(t, "ty=")
-					break
+				}
+				if strings.HasPrefix(t, "rp=") {
+					queue = strings.TrimPrefix(t, "rp=")
+				}
+				if t == "TLS=1.2" {
+					tls = true
 				}
 			}
 			id++
-			printers <- &Printer{id, model, entry.AddrIPv4[0].String(), entry.Port, false}
+			printers <- &Printer{id, model, entry.AddrIPv4[0].String(), entry.Port, queue, tls}
 		}
 	}(entries)
 

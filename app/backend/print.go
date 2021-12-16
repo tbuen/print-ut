@@ -17,11 +17,37 @@
 package backend
 
 import (
+	"os"
+
 	"github.com/phin1x/go-ipp"
 )
 
+var requestID int32
+
 func Print(file string, prt Printer) error {
-	client := ipp.NewIPPClient(prt.IP, prt.Port, "", "", prt.TLS)
-	_, err := client.PrintFile(file, "my-printer", map[string]interface{}{})
+	i, err := os.Stat(file)
+	if err != nil {
+		return err
+	}
+
+	f, err := os.Open(file)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	requestID++
+	req := ipp.NewRequest(ipp.OperationPrintJob, requestID)
+	req.OperationAttributes[ipp.AttributePrinterURI] = "ipp://" + prt.IP + "/" + prt.Queue
+
+	req.File = f
+	req.FileSize = int(i.Size())
+
+	http := ipp.NewHttpAdapter(prt.IP, prt.Port, "", "", false)
+
+	uri := http.GetHttpUri("", prt.Queue)
+
+	_, err = http.SendRequest(uri, req, nil)
+
 	return err
 }
