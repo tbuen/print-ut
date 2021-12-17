@@ -29,22 +29,29 @@ import (
 
 type UiData struct {
 	Discovery bool
+	Printing  bool
 	Printer   string
 	Filename  string
 }
 
 var (
-	uiData     UiData
-	model      *qml.Common
-	cancel     context.CancelFunc
-	channel    chan *backend.Printer
-	scanResult map[int]backend.Printer
-	printer    backend.Printer
-	filename   string
+	uiData       UiData
+	model        *qml.Common
+	cancel       context.CancelFunc
+	scanChannel  chan *backend.Printer
+	scanResult   map[int]backend.Printer
+	printChannel chan error
+	printer      backend.Printer
+	filename     string
 )
 
 func Start(c *qml.Context) {
 	c.SetVar("go", &uiData)
+}
+
+func (ui *UiData) Refresh() string {
+	ui.refreshPrinterlist()
+	return ui.refreshPrinting()
 }
 
 func (ui *UiData) StartDiscovery(obj *qml.Common) {
@@ -54,7 +61,7 @@ func (ui *UiData) StartDiscovery(obj *qml.Common) {
 	model = obj
 	var err error
 	scanResult = make(map[int]backend.Printer)
-	channel, cancel, err = backend.Discover()
+	scanChannel, cancel, err = backend.Discover()
 	if err != nil {
 		return
 	}
@@ -69,12 +76,12 @@ func (ui *UiData) StopDiscovery() {
 	cancel()
 }
 
-func (ui *UiData) RefreshList() {
+func (ui *UiData) refreshPrinterlist() {
 	if !ui.Discovery {
 		return
 	}
 	select {
-	case prt, ok := <-channel:
+	case prt, ok := <-scanChannel:
 		if ok {
 			fmt.Println("Found printer:", prt)
 			scanResult[prt.ID] = *prt
@@ -112,10 +119,32 @@ func (ui *UiData) SetFile(name string) {
 	qml.Changed(ui, &ui.Filename)
 }
 
-func (ui *UiData) Print() (msg string) {
-	err := backend.Print(filename, printer)
-	if err != nil {
-		msg = err.Error()
+func (ui *UiData) Print() {
+	if ui.Printing {
+		return
+	}
+	printChannel = backend.Print(filename, printer)
+	ui.Printing = true
+	qml.Changed(ui, &ui.Printing)
+}
+
+func (ui *UiData) refreshPrinting() (msg string) {
+	if !ui.Printing {
+		return
+	}
+	select {
+	case err, ok := <-printChannel:
+		if ok {
+			if err != nil {
+				msg = err.Error()
+			} else {
+				msg = "Success!"
+			}
+		} else {
+			ui.Printing = false
+			qml.Changed(ui, &ui.Printing)
+		}
+	default:
 	}
 	return
 }

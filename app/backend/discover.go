@@ -58,6 +58,7 @@ func Discover() (chan *Printer, context.CancelFunc, error) {
 			fmt.Println()
 
 			model := entry.ServiceRecord.Instance
+			ip := entry.AddrIPv4[0].String()
 			queue := ""
 			tls := false
 			for _, t := range entry.Text {
@@ -71,8 +72,10 @@ func Discover() (chan *Printer, context.CancelFunc, error) {
 					tls = true
 				}
 			}
-			id++
-			printers <- &Printer{id, model, entry.AddrIPv4[0].String(), entry.Port, queue, tls}
+			if model != "" && ip != "" && queue != "" && entry.Port > 0 {
+				id++
+				printers <- &Printer{id, model, ip, entry.Port, queue, tls}
+			}
 		}
 	}(entries)
 

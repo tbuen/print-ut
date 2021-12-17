@@ -28,6 +28,11 @@ Page {
         title: "SimplePrint"
     }
 
+    WaitingBar {
+        anchors.top: header.bottom
+        waiting: go.printing
+    }
+
     Column {
         anchors {
             top: header.bottom
@@ -83,7 +88,7 @@ Page {
             }
             onClicked: {
                 Qt.inputMethod.hide()
-                mediaImporter.contentType = ContentHub.ContentType.Documents
+                mediaImporter.contentType = ContentHub.ContentType.All
                 mediaImporter.requestMedia()
             }
             leadingActions: ListItemActions {
@@ -106,13 +111,8 @@ Page {
                     anchors.rightMargin: anchors.leftMargin
                     text: i18n.tr("Print")
                     color: theme.palette.normal.positive
-                    enabled: go.printer && go.filename
-                    onClicked: {
-                        var msg = go.print()
-                        if (msg != "") {
-                            functions.showError(msg)
-                        }
-                    }
+                    enabled: go.printer && go.filename && !go.printing
+                    onClicked: go.print()
                 }
             }
         }

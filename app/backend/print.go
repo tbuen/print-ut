@@ -24,30 +24,38 @@ import (
 
 var requestID int32
 
-func Print(file string, prt Printer) error {
-	i, err := os.Stat(file)
-	if err != nil {
-		return err
-	}
+func Print(file string, prt Printer) chan error {
+	ch := make(chan error)
+	go func() {
+		defer close(ch)
 
-	f, err := os.Open(file)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
+		i, err := os.Stat(file)
+		if err != nil {
+			ch <- err
+			return
+		}
 
-	requestID++
-	req := ipp.NewRequest(ipp.OperationPrintJob, requestID)
-	req.OperationAttributes[ipp.AttributePrinterURI] = "ipp://" + prt.IP + "/" + prt.Queue
+		f, err := os.Open(file)
+		if err != nil {
+			ch <- err
+			return
+		}
+		defer f.Close()
 
-	req.File = f
-	req.FileSize = int(i.Size())
+		requestID++
+		req := ipp.NewRequest(ipp.OperationPrintJob, requestID)
+		req.OperationAttributes[ipp.AttributePrinterURI] = "ipp://" + prt.IP + "/" + prt.Queue
 
-	http := ipp.NewHttpAdapter(prt.IP, prt.Port, "", "", false)
+		req.File = f
+		req.FileSize = int(i.Size())
 
-	uri := http.GetHttpUri("", prt.Queue)
+		http := ipp.NewHttpAdapter(prt.IP, prt.Port, "", "", false)
 
-	_, err = http.SendRequest(uri, req, nil)
+		uri := http.GetHttpUri("", prt.Queue)
 
-	return err
+		_, err = http.SendRequest(uri, req, nil)
+
+		ch <- err
+	}()
+	return ch
 }

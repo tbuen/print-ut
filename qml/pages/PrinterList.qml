@@ -28,50 +28,47 @@ Page {
     }
 
     WaitingBar {
-        id: waitingBar
         anchors.top: header.bottom
         waiting: go.discovery
     }
 
-    Rectangle {
+    ListModel {
+        id: listModel
+        function add(text) {
+            const prt = JSON.parse(text)
+            listModel.append(prt)
+        }
+    }
+
+    Component {
+        id: listDelegate
+        ListItem {
+            height: item.height + (divider.visible ? divider.height : 0)
+            ListItemLayout {
+                id: item
+                title.text: model
+                subtitle.text: ip
+                Icon {
+                    height: parent.title.font.pixelSize * 2
+                    name: "printer-symbolic"
+                    SlotsLayout.position: SlotsLayout.Leading
+                }
+            }
+            onClicked: {
+                go.selectPrinter(id)
+                mainStack.pop()
+            }
+        }
+    }
+
+    ScrollView {
         anchors {
-            top: go.discovery ? waitingBar.bottom : header.bottom
+            top: header.bottom
             bottom: parent.bottom
             left: parent.left
             right: parent.right
         }
-
-        ListModel {
-            id: listModel
-            function add(text) {
-                const prt = JSON.parse(text)
-                listModel.append(prt)
-            }
-        }
-
-        Component {
-            id: listDelegate
-            ListItem {
-                height: item.height + (divider.visible ? divider.height : 0)
-                ListItemLayout {
-                    id: item
-                    title.text: model
-                    subtitle.text: ip
-                    Icon {
-                        height: parent.title.font.pixelSize * 2
-                        name: "printer-symbolic"
-                        SlotsLayout.position: SlotsLayout.Leading
-                    }
-                }
-                onClicked: {
-                    go.selectPrinter(id)
-                    mainStack.pop()
-                }
-            }
-        }
-
         ListView {
-            anchors.fill: parent
             model: listModel
             delegate: listDelegate
         }

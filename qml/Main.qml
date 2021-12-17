@@ -39,19 +39,17 @@ MainView {
         running: true
         repeat: true
         triggeredOnStart: false
-        onTriggered: go.refreshList()
+        onTriggered: {
+            var msg = go.refresh()
+            if (msg != "") {
+                PopupUtils.open(errorMessage, null, {'text': msg})
+            }
+        }
     }
 
     Component {
         id: errorMessage
         Message {
-        }
-    }
-
-    Item {
-        id: functions
-        function showError(text) {
-            PopupUtils.open(errorMessage, null, {'text': text})
         }
     }
 }
