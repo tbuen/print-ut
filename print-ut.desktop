@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=SimplePrint
-Exec=print %U
+Exec=print-ut %U
 Icon=assets/icon.svg
 Terminal=false
 Type=Application

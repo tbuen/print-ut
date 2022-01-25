@@ -1,12 +1,12 @@
 {
-    "name": "print.tbuen",
+    "name": "print-ut.tbuen",
     "description": "Simple Printer App",
     "architecture": "@CLICK_ARCH@",
     "title": "SimplePrint",
     "hooks": {
-        "print": {
-            "apparmor": "print.apparmor",
-            "desktop":  "print.desktop"
+        "print-ut": {
+            "apparmor": "print-ut.apparmor",
+            "desktop":  "print-ut.desktop"
         }
     },
     "version": "0.1.0",

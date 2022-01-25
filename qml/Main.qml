@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021  Thomas Büning
+ * Copyright (C) 2022  Thomas Büning
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ import "components"
 MainView {
     id: root
     objectName: 'mainView'
-    applicationName: 'print.tbuen'
+    applicationName: 'print-ut.tbuen'
     automaticOrientation: true
 
     width: units.gu(45)
