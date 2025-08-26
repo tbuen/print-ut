@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2014 Canonical, Ltd.
+ * Copyright (C) 2025  Thomas Büning
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,9 +15,9 @@
  */
 
 import QtQuick 2.9
-import Ubuntu.Components 1.3 as UITK
-import Ubuntu.Components.Popups 1.3 as Popups
-import Ubuntu.Content 1.3 as ContentHub
+import Lomiri.Components 1.3 as UITK
+import Lomiri.Components.Popups 1.3 as Popups
+import Lomiri.Content 1.3 as ContentHub
 
 Item {
     id: root
@@ -87,12 +87,6 @@ Item {
                 }
             }
 
-            // WORKAROUND: Work around for application becoming insensitive to touch events
-            // if the dialog is dismissed while the application is inactive.
-            // Just listening for changes to Qt.application.active doesn't appear
-            // to be enough to resolve this, so it seems that something else needs
-            // to be happening first. As such there's a potential for a race
-            // condition here, although as yet no problem has been encountered.
             Timer {
                 id: acceptTimer
 

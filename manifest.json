@@ -1,15 +1,15 @@
 {
-    "name": "print-ut.tbuen",
-    "description": "Simple Printer App",
-    "architecture": "@CLICK_ARCH@",
-    "title": "SimplePrint",
-    "hooks": {
-        "print-ut": {
-            "apparmor": "print-ut.apparmor",
-            "desktop":  "print-ut.desktop"
-        }
-    },
-    "version": "0.1.0",
-    "maintainer": "Thomas Büning <buening@online.de>",
-    "framework" : "@CLICK_FRAMEWORK@"
+  "name": "print-ut.tbuen",
+  "description": "Simple Printer App",
+  "architecture": "@CLICK_ARCH@",
+  "title": "SimplePrint",
+  "hooks": {
+    "print-ut": {
+      "apparmor": "print-ut.apparmor",
+      "desktop": "print-ut.desktop"
+    }
+  },
+  "version": "0.2.0",
+  "maintainer": "Thomas Büning <buening@online.de>",
+  "framework": "@CLICK_FRAMEWORK@"
 }

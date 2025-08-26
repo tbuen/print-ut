@@ -1,9 +1,9 @@
-clickable_minimum_required: "7"
+clickable_minimum_required: "8.4"
 builder: go
 kill: print-ut
 install_root_data:
-- manifest.json
-- print-ut.apparmor
-- print-ut.desktop
-- assets
-- qml
+  - manifest.json
+  - print-ut.apparmor
+  - print-ut.desktop
+  - assets
+  - qml

@@ -4,4 +4,4 @@ Exec=print-ut %U
 Icon=assets/icon.svg
 Terminal=false
 Type=Application
-X-Ubuntu-Touch=true
+X-Lomiri-Touch=true
